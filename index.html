@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bengtsson Waffle Membrane (US 3,199,963) — 3D Preview</title>
+<style>
+  :root { color-scheme: dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: #0e1116;
+    font-family: "Segoe UI", system-ui, sans-serif; color: #e6edf3; }
+  #app { position: fixed; inset: 0; }
+  #panel {
+    position: fixed; top: 16px; left: 16px; width: 320px; padding: 16px 18px;
+    background: rgba(20, 26, 34, 0.82); backdrop-filter: blur(8px);
+    border: 1px solid #2b3440; border-radius: 12px; font-size: 13px; line-height: 1.5;
+  }
+  #panel h1 { font-size: 15px; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.2px; }
+  #panel .sub { color: #8b97a6; font-size: 11.5px; margin-bottom: 12px; }
+  #panel table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  #panel td { padding: 2px 0; }
+  #panel td:first-child { color: #8b97a6; }
+  #panel td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+  .ctrls { margin-top: 12px; padding-top: 12px; border-top: 1px solid #2b3440;
+    display: flex; flex-direction: column; gap: 9px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .row label { color: #b9c4d0; font-size: 12px; }
+  input[type=range] { width: 150px; }
+  button { background: #1f6feb; color: #fff; border: 0; border-radius: 7px;
+    padding: 6px 10px; font-size: 12px; cursor: pointer; }
+  button.sec { background: #2b3440; }
+  button:hover { filter: brightness(1.12); }
+  .toggle { display: flex; gap: 6px; }
+  #hint { position: fixed; bottom: 14px; left: 16px; color: #6b7685; font-size: 11.5px; }
+  a { color: #58a6ff; text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="panel">
+  <h1>Corrugated "Waffle" Membrane</h1>
+  <div class="sub">US 3,199,963 &middot; B. G. Bengtsson (1962/1965)<br>GTT Mark III primary membrane basis</div>
+  <table>
+    <tr><td>Pitch P</td><td><b>340</b> mm</td></tr>
+    <tr><td>Thickness t</td><td><b>1.2</b> mm</td></tr>
+    <tr><td>Rib height h_r</td><td><b>34</b> mm</td></tr>
+    <tr><td>Node height h_n</td><td><b>53</b> mm</td></tr>
+    <tr><td>Node footprint</td><td><b>80</b> mm</td></tr>
+    <tr><td>Material</td><td>304L SS</td></tr>
+  </table>
+  <div class="ctrls">
+    <div class="row"><label>Array N&times;N</label>
+      <input id="nslider" type="range" min="2" max="6" step="1" value="4" />
+      <span id="nval" style="width:18px;text-align:right">4</span></div>
+    <div class="row"><label>Wireframe</label>
+      <input id="wire" type="checkbox" /></div>
+    <div class="row"><label>Auto-rotate</label>
+      <input id="autorot" type="checkbox" checked /></div>
+    <div class="toggle">
+      <button id="top">Top</button>
+      <button id="iso" class="sec">Iso</button>
+      <button id="front" class="sec">Front</button>
+    </div>
+  </div>
+</div>
+<div id="hint">drag = orbit &nbsp;|&nbsp; scroll = zoom &nbsp;|&nbsp; right-drag = pan</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// ---- Membrane parameters (mm) — must match waffle_membrane.py ----
+const P = 340, H_R = 34, H_N = 53, W_N = 80, D_NODE = 9, P_NORM = 4;
+const R_NODE = W_N / 2;
+const RES_PER_CELL = 30;          // mesh resolution per pitch cell
+
+// ---- Height-field z(x, y) (identical model to the Python script) ----
+const g = s => 0.5 * (1 + Math.cos(2 * Math.PI * s / P));
+function zTop(x, y) {
+  const gx = g(x), gy = g(y);
+  const rib = H_R * Math.pow(Math.pow(gx, P_NORM) + Math.pow(gy, P_NORM), 1 / P_NORM);
+  const xn = Math.round(x / P) * P, yn = Math.round(y / P) * P;
+  const rho = Math.hypot(x - xn, y - yn);
+  const bump = (H_N - H_R) * 0.5 * (1 - Math.tanh((rho - R_NODE) / D_NODE));
+  return Math.max(0, Math.min(rib + bump, H_N));
+}
+
+// ---- Scene ----
+const app = document.getElementById('app');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+app.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0e1116);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 20000);
+camera.up.set(0, 0, 1);                            // Z is up
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.8;
+
+// Lights (env map does most of the work; these add definition)
+scene.add(new THREE.HemisphereLight(0xbcd0e6, 0x1a1a22, 0.5));
+const key = new THREE.DirectionalLight(0xffffff, 2.0); key.position.set(1, 0.6, 1.4); scene.add(key);
+const fill = new THREE.DirectionalLight(0x9fb4cc, 0.8); fill.position.set(-1, -0.4, 0.6); scene.add(fill);
+
+const material = new THREE.MeshStandardMaterial({
+  color: 0xb9c2cb, metalness: 0.95, roughness: 0.33, side: THREE.DoubleSide,
+});
+
+let mesh = null;
+function buildMesh(nCell) {
+  if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); }
+  const span = nCell * P;
+  const segs = nCell * RES_PER_CELL;
+  const geo = new THREE.PlaneGeometry(span, span, segs, segs);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i) + span / 2;             // shift to [0, span]
+    const y = pos.getY(i) + span / 2;
+    pos.setZ(i, zTop(x, y));
+  }
+  pos.needsUpdate = true;
+  geo.computeVertexNormals();
+  mesh = new THREE.Mesh(geo, material);
+  scene.add(mesh);
+  controls.target.set(0, 0, H_N / 2);
+  return span;
+}
+
+let span = buildMesh(4);
+
+function setView(kind) {
+  const d = span * 1.15;
+  if (kind === 'top')   camera.position.set(0.01, 0.01, d * 1.4);
+  if (kind === 'iso')   camera.position.set(d * 0.9, -d * 0.9, d * 0.7);
+  if (kind === 'front') camera.position.set(0, -d * 1.3, d * 0.25);
+  controls.update();
+}
+setView('iso');
+
+// ---- UI ----
+const $ = id => document.getElementById(id);
+$('nslider').addEventListener('input', e => {
+  const n = +e.target.value; $('nval').textContent = n;
+  span = buildMesh(n); setView('iso');
+});
+$('wire').addEventListener('change', e => material.wireframe = e.target.checked);
+$('autorot').addEventListener('change', e => controls.autoRotate = e.target.checked);
+$('top').addEventListener('click', () => setView('top'));
+$('iso').addEventListener('click', () => setView('iso'));
+$('front').addEventListener('click', () => setView('front'));
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+(function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+})();
+</script>
+</body>
+</html>
