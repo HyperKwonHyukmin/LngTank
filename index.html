@@ -67,6 +67,8 @@
     <div class="row"><label>Array N&times;N</label>
       <input id="nslider" type="range" min="2" max="6" step="1" value="4" />
       <span id="nval" style="width:18px;text-align:right">4</span></div>
+    <div class="row"><label><b>Folded knots</b> (real)</label>
+      <input id="knots" type="checkbox" /></div>
     <div class="row"><label>Height colormap</label>
       <input id="cmap" type="checkbox" /></div>
     <div class="row"><label>Base grid (340 mm)</label>
@@ -83,7 +85,7 @@
     </div>
   </div>
   <div id="scalecap"></div>
-  <div id="disc">* height-field 근사 — 노드의 접힘(mushroom fold)은 미표현. 정밀 형상은 STEP B-rep 참조.</div>
+  <div id="disc"></div>
 </div>
 
 <div id="legend">
@@ -95,7 +97,7 @@
 
 <script>
   // visible message if the module/CDN fails instead of a black screen
-  window.addEventListener('error', e => {
+  window.addEventListener('error', () => {
     if (!window.__ok) document.getElementById('err').style.display = 'flex';
   });
 </script>
@@ -116,20 +118,61 @@ window.__ok = true;
 // ---- Membrane parameters (mm) — must match waffle_membrane.py ----
 const P = 340, H_LARGE = 54, H_SMALL = 37.2, CREST = 0.09, VALLEY = 0.27, P_NORM = 8;
 const RES_PER_CELL = 30;
+const R_WELL = 88;                 // crossing depression radius when knots are shown
 
-// ---- Dual-height height-field z(x, y) (identical model to the Python script) ----
+// ---- Dual-height height-field z(x, y) ----
 const Rprof = a => Math.min(Math.max((VALLEY - Math.abs(a)) / (VALLEY - CREST), 0), 1);
 const ridge = c => { const t = c / P; return Rprof(t - Math.round(t)); };
-function zTop(x, y) {
+function zTop(x, y, knot) {
   const la = H_LARGE * ridge(y), sm = H_SMALL * ridge(x);
-  return Math.pow(Math.pow(la, P_NORM) + Math.pow(sm, P_NORM), 1 / P_NORM);
+  let z = Math.pow(Math.pow(la, P_NORM) + Math.pow(sm, P_NORM), 1 / P_NORM);
+  if (knot) {                       // sink a bowl at each crossing so the knot nests in it
+    const xn = Math.round(x / P) * P, yn = Math.round(y / P) * P;
+    const d = Math.hypot(x - xn, y - yn);
+    if (d < R_WELL) { const t = d / R_WELL; z *= t * t * (3 - 2 * t); }   // smoothstep -> 0 at centre
+  }
+  return z;
 }
-// blue->cyan->green->yellow->red colormap for height fraction f in [0,1]
 function heat(f) {
   const stops = [[0.17,0.35,1],[0.12,0.82,0.82],[0.27,0.82,0.27],[1,0.82,0.25],[1,0.29,0.25]];
   const t = Math.min(Math.max(f, 0), 1) * (stops.length - 1);
   const i = Math.floor(t), k = t - i, a = stops[i], b = stops[Math.min(i + 1, stops.length - 1)];
   return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+}
+
+// ---- Folded "mushroom" knot geometry (JS port of waffle_knot.py; Z-up) ----
+function buildKnotGeometry() {
+  const NZ = 30, NT = 64, H = H_LARGE;
+  const RB = 90, RW = 64, RC = 74, ZW = 0.52, PLEAT = 0.14, FOLDS = 4, TWIST = 0.2, SQUARE = 0.35;
+  const triw = a => (2 / Math.PI) * Math.asin(Math.sin(a));
+  const rprof = zf => zf <= ZW ? RB + (RW - RB) * (zf / ZW) : RW + (RC - RW) * ((zf - ZW) / (1 - ZW));
+  const pos = [], idx = [];
+  for (let k = 0; k < NZ; k++) {
+    const zf = k / (NZ - 1), z = H * zf, ph = TWIST * 2 * Math.PI * zf, r0 = rprof(zf);
+    for (let j = 0; j < NT; j++) {
+      const th = 2 * Math.PI * j / NT;
+      const sqf = Math.pow(Math.pow(Math.abs(Math.cos(th)), 4) + Math.pow(Math.abs(Math.sin(th)), 4), -0.25);
+      const shape = (1 - SQUARE) + SQUARE * sqf;
+      const fold = 1 + PLEAT * triw(FOLDS * th + ph);
+      const r = r0 * fold * shape;
+      pos.push(r * Math.cos(th), r * Math.sin(th), z);
+    }
+  }
+  const vid = (k, j) => k * NT + (j % NT);
+  for (let k = 0; k < NZ - 1; k++) for (let j = 0; j < NT; j++) {
+    const a = vid(k, j), b = vid(k, j + 1), c = vid(k + 1, j + 1), d = vid(k + 1, j);
+    idx.push(a, b, c, a, c, d);
+  }
+  const baseC = pos.length / 3; pos.push(0, 0, 0);
+  const topC = pos.length / 3; pos.push(0, 0, H);
+  for (let j = 0; j < NT; j++) {
+    idx.push(baseC, vid(0, j + 1), vid(0, j));
+    idx.push(topC, vid(NZ - 1, j), vid(NZ - 1, j + 1));
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx); g.computeVertexNormals();
+  return g;
 }
 
 // ---- Scene ----
@@ -161,10 +204,30 @@ const fill = new THREE.DirectionalLight(0x9fb4cc, 0.8); fill.position.set(-1, -0
 const material = new THREE.MeshStandardMaterial({
   color: 0xb9c2cb, metalness: 0.95, roughness: 0.33, side: THREE.DoubleSide,
 });
+const knotMat = new THREE.MeshStandardMaterial({
+  color: 0xccd4dc, metalness: 0.95, roughness: 0.3, side: THREE.DoubleSide,
+});
+const knotGeo = buildKnotGeometry();
 
-let mesh = null, grid = null, spanX = 0, spanY = 0;
+let mesh = null, grid = null, knotInst = null, spanX = 0, spanY = 0, curNx = 4, curNy = 4;
+let knotsOn = false;
+
+function placeKnots(nx, ny) {
+  if (knotInst) { scene.remove(knotInst); knotInst.dispose(); knotInst = null; }
+  if (!knotsOn) return;
+  const count = (nx + 1) * (ny + 1);
+  knotInst = new THREE.InstancedMesh(knotGeo, knotMat, count);
+  const m = new THREE.Matrix4(); let n = 0;
+  for (let i = 0; i <= nx; i++) for (let j = 0; j <= ny; j++) {
+    m.makeTranslation(i * P - spanX / 2, j * P - spanY / 2, 0);
+    knotInst.setMatrixAt(n++, m);
+  }
+  knotInst.instanceMatrix.needsUpdate = true;
+  scene.add(knotInst);
+}
 
 function buildMesh(nx, ny) {
+  curNx = nx; curNy = ny;
   if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); }
   if (grid) { scene.remove(grid); grid.geometry.dispose(); }
   spanX = nx * P; spanY = ny * P;
@@ -174,7 +237,7 @@ function buildMesh(nx, ny) {
   const col = new Float32Array(pos.count * 3);
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i) + spanX / 2, y = pos.getY(i) + spanY / 2;
-    const z = zTop(x, y); pos.setZ(i, z);
+    const z = zTop(x, y, knotsOn); pos.setZ(i, z);
     const c = heat(z / H_LARGE); col[i * 3] = c[0]; col[i * 3 + 1] = c[1]; col[i * 3 + 2] = c[2];
   }
   pos.needsUpdate = true;
@@ -183,16 +246,19 @@ function buildMesh(nx, ny) {
   mesh = new THREE.Mesh(geo, material);
   scene.add(mesh);
 
-  // base grid at z=0, one division per pitch cell -> conveys scale + the square lattice
   grid = new THREE.GridHelper(Math.max(spanX, spanY), Math.max(nx, ny), 0x3a4757, 0x232c38);
   grid.rotation.x = Math.PI / 2;                   // lay into the XY plane (Z up)
   grid.visible = document.getElementById('grid').checked;
   scene.add(grid);
 
+  placeKnots(nx, ny);
   controls.target.set(0, 0, H_LARGE / 2);
   document.getElementById('scalecap').innerHTML =
     `1 cell = <b>340 mm</b> &middot; panel = <b>${spanX} &times; ${spanY} mm</b><br>` +
     `relief: large <b>54</b> / small <b>37.2 mm</b>`;
+  document.getElementById('disc').innerHTML = knotsOn
+    ? '* folded knots = <b>approximate</b> fold model (overhang + 4-fold creases); not GTT-exact.'
+    : '* height-field 근사 — 노드 접힘 미표현. "Folded knots" 체크 또는 STEP B-rep 참조.';
 }
 
 function setView(kind) {
@@ -211,6 +277,7 @@ $('nslider').addEventListener('input', e => {
   const n = +e.target.value; $('nval').textContent = n; buildMesh(n, n); setView('iso');
 });
 $('panelbtn').addEventListener('click', () => { buildMesh(3, 9); setView('iso'); });
+$('knots').addEventListener('change', e => { knotsOn = e.target.checked; buildMesh(curNx, curNy); });
 $('cmap').addEventListener('change', e => {
   material.vertexColors = e.target.checked;
   if (e.target.checked) { material.metalness = 0.15; material.roughness = 0.8; material.color.set(0xffffff); }
