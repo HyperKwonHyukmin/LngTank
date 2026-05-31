@@ -140,21 +140,26 @@ function heat(f) {
   return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
 }
 
-// ---- Folded "mushroom" knot geometry (JS port of waffle_knot.py; Z-up) ----
+// ---- Folded knot geometry (JS port of waffle_knot.py; Z-up) ----
+// Node dims DERIVED from the corrugation spec (item 3): base = sum of large+small
+// footprints, waist at the small-crest height, arms along the corrugation axes, 2-fold
+// large/small asymmetry. Exact press fold is GTT-proprietary (literature-informed approx).
 function buildKnotGeometry() {
   const NZ = 30, NT = 64, H = H_LARGE;
-  const RB = 90, RW = 64, RC = 74, ZW = 0.52, PLEAT = 0.14, FOLDS = 4, TWIST = 0.2, SQUARE = 0.35;
+  const RB = 77.3, RW = 29.7, RC = 39.8, ZW = 0.689, PLEAT = 0.13, FOLDS = 4,
+        TWIST = 0.08, SQUARE = 0.45, PHASE0 = Math.PI / 2, ASYM = 0.10;
   const triw = a => (2 / Math.PI) * Math.asin(Math.sin(a));
   const rprof = zf => zf <= ZW ? RB + (RW - RB) * (zf / ZW) : RW + (RC - RW) * ((zf - ZW) / (1 - ZW));
   const pos = [], idx = [];
   for (let k = 0; k < NZ; k++) {
-    const zf = k / (NZ - 1), z = H * zf, ph = TWIST * 2 * Math.PI * zf, r0 = rprof(zf);
+    const zf = k / (NZ - 1), z = H * zf, ph = PHASE0 + TWIST * 2 * Math.PI * zf, r0 = rprof(zf);
     for (let j = 0; j < NT; j++) {
       const th = 2 * Math.PI * j / NT;
       const sqf = Math.pow(Math.pow(Math.abs(Math.cos(th)), 4) + Math.pow(Math.abs(Math.sin(th)), 4), -0.25);
       const shape = (1 - SQUARE) + SQUARE * sqf;
       const fold = 1 + PLEAT * triw(FOLDS * th + ph);
-      const r = r0 * fold * shape;
+      const asym = 1 + ASYM * Math.cos(2 * th);     // large (x) arms wider than small (y) arms
+      const r = r0 * fold * shape * asym;
       pos.push(r * Math.cos(th), r * Math.sin(th), z);
     }
   }
