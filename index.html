@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Bengtsson Waffle Membrane (US 3,199,963) — 3D Preview</title>
+<title>GTT Mark III Waffle Membrane (US 3,199,963) — 3D Preview</title>
 <style>
   :root { color-scheme: dark; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,9 +11,10 @@
     font-family: "Segoe UI", system-ui, sans-serif; color: #e6edf3; }
   #app { position: fixed; inset: 0; }
   #panel {
-    position: fixed; top: 16px; left: 16px; width: 320px; padding: 16px 18px;
+    position: fixed; top: 16px; left: 16px; width: 326px; padding: 16px 18px;
     background: rgba(20, 26, 34, 0.82); backdrop-filter: blur(8px);
     border: 1px solid #2b3440; border-radius: 12px; font-size: 13px; line-height: 1.5;
+    max-height: calc(100% - 32px); overflow: auto;
   }
   #panel h1 { font-size: 15px; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.2px; }
   #panel .sub { color: #8b97a6; font-size: 11.5px; margin-bottom: 12px; }
@@ -30,40 +31,74 @@
     padding: 6px 10px; font-size: 12px; cursor: pointer; }
   button.sec { background: #2b3440; }
   button:hover { filter: brightness(1.12); }
-  .toggle { display: flex; gap: 6px; }
+  .toggle { display: flex; gap: 6px; flex-wrap: wrap; }
+  #scalecap { margin-top: 10px; font-size: 11px; color: #9aa7b6;
+    border-top: 1px dashed #2b3440; padding-top: 8px; }
+  #disc { margin-top: 6px; font-size: 10.5px; color: #6f7b8a; }
   #hint { position: fixed; bottom: 14px; left: 16px; color: #6b7685; font-size: 11.5px; }
   a { color: #58a6ff; text-decoration: none; }
+  #err { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    text-align: center; padding: 40px; background: #0e1116; color: #ff8d8d; font-size: 15px; z-index: 99; }
+  #legend { position: fixed; bottom: 14px; right: 16px; display: none;
+    background: rgba(20,26,34,0.82); border: 1px solid #2b3440; border-radius: 8px;
+    padding: 8px 10px; font-size: 11px; }
+  #legend .bar { width: 120px; height: 9px; border-radius: 3px; margin: 4px 0;
+    background: linear-gradient(90deg,#2b59ff,#1fd0d0,#46d246,#ffd23f,#ff4b3f); }
+  #legend .lab { display:flex; justify-content:space-between; color:#9aa7b6; }
 </style>
 </head>
 <body>
 <div id="app"></div>
+<div id="err">3D 엔진(Three.js) 로드 실패 — 인터넷 연결을 확인하세요.<br>
+  (이 뷰어는 CDN에서 Three.js를 불러옵니다.)</div>
+
 <div id="panel">
   <h1>Corrugated "Waffle" Membrane</h1>
-  <div class="sub">US 3,199,963 &middot; B. G. Bengtsson (1962/1965)<br>GTT Mark III primary membrane basis</div>
+  <div class="sub">US 3,199,963 &middot; B. G. Bengtsson &middot; GTT Mark III primary barrier</div>
   <table>
     <tr><td>Pitch P</td><td><b>340</b> mm</td></tr>
     <tr><td>Thickness t</td><td><b>1.2</b> mm</td></tr>
-    <tr><td>Rib height h_r</td><td><b>34</b> mm</td></tr>
-    <tr><td>Node height h_n</td><td><b>53</b> mm</td></tr>
-    <tr><td>Node footprint</td><td><b>80</b> mm</td></tr>
+    <tr><td>Large corrugation</td><td><b>54</b> mm</td></tr>
+    <tr><td>Small corrugation</td><td><b>37.2</b> mm</td></tr>
+    <tr><td>Knot height</td><td>&asymp; <b>54</b> mm</td></tr>
     <tr><td>Material</td><td>304L SS</td></tr>
   </table>
   <div class="ctrls">
     <div class="row"><label>Array N&times;N</label>
       <input id="nslider" type="range" min="2" max="6" step="1" value="4" />
       <span id="nval" style="width:18px;text-align:right">4</span></div>
+    <div class="row"><label>Height colormap</label>
+      <input id="cmap" type="checkbox" /></div>
+    <div class="row"><label>Base grid (340 mm)</label>
+      <input id="grid" type="checkbox" checked /></div>
     <div class="row"><label>Wireframe</label>
       <input id="wire" type="checkbox" /></div>
     <div class="row"><label>Auto-rotate</label>
       <input id="autorot" type="checkbox" checked /></div>
     <div class="toggle">
-      <button id="top">Top</button>
+      <button id="panelbtn">Panel 3&times;9</button>
+      <button id="top" class="sec">Top</button>
       <button id="iso" class="sec">Iso</button>
       <button id="front" class="sec">Front</button>
     </div>
   </div>
+  <div id="scalecap"></div>
+  <div id="disc">* height-field 근사 — 노드의 접힘(mushroom fold)은 미표현. 정밀 형상은 STEP B-rep 참조.</div>
 </div>
+
+<div id="legend">
+  <div>Height (z)</div><div class="bar"></div>
+  <div class="lab"><span>0</span><span>54 mm</span></div>
+</div>
+
 <div id="hint">drag = orbit &nbsp;|&nbsp; scroll = zoom &nbsp;|&nbsp; right-drag = pan</div>
+
+<script>
+  // visible message if the module/CDN fails instead of a black screen
+  window.addEventListener('error', e => {
+    if (!window.__ok) document.getElementById('err').style.display = 'flex';
+  });
+</script>
 
 <script type="importmap">
 { "imports": {
@@ -76,21 +111,25 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+window.__ok = true;
 
 // ---- Membrane parameters (mm) — must match waffle_membrane.py ----
-const P = 340, H_R = 34, H_N = 53, W_N = 80, D_NODE = 9, P_NORM = 4;
-const R_NODE = W_N / 2;
-const RES_PER_CELL = 30;          // mesh resolution per pitch cell
+const P = 340, H_LARGE = 54, H_SMALL = 37.2, CREST = 0.09, VALLEY = 0.27, P_NORM = 8;
+const RES_PER_CELL = 30;
 
-// ---- Height-field z(x, y) (identical model to the Python script) ----
-const g = s => 0.5 * (1 + Math.cos(2 * Math.PI * s / P));
+// ---- Dual-height height-field z(x, y) (identical model to the Python script) ----
+const Rprof = a => Math.min(Math.max((VALLEY - Math.abs(a)) / (VALLEY - CREST), 0), 1);
+const ridge = c => { const t = c / P; return Rprof(t - Math.round(t)); };
 function zTop(x, y) {
-  const gx = g(x), gy = g(y);
-  const rib = H_R * Math.pow(Math.pow(gx, P_NORM) + Math.pow(gy, P_NORM), 1 / P_NORM);
-  const xn = Math.round(x / P) * P, yn = Math.round(y / P) * P;
-  const rho = Math.hypot(x - xn, y - yn);
-  const bump = (H_N - H_R) * 0.5 * (1 - Math.tanh((rho - R_NODE) / D_NODE));
-  return Math.max(0, Math.min(rib + bump, H_N));
+  const la = H_LARGE * ridge(y), sm = H_SMALL * ridge(x);
+  return Math.pow(Math.pow(la, P_NORM) + Math.pow(sm, P_NORM), 1 / P_NORM);
+}
+// blue->cyan->green->yellow->red colormap for height fraction f in [0,1]
+function heat(f) {
+  const stops = [[0.17,0.35,1],[0.12,0.82,0.82],[0.27,0.82,0.27],[1,0.82,0.25],[1,0.29,0.25]];
+  const t = Math.min(Math.max(f, 0), 1) * (stops.length - 1);
+  const i = Math.floor(t), k = t - i, a = stops[i], b = stops[Math.min(i + 1, stops.length - 1)];
+  return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
 }
 
 // ---- Scene ----
@@ -115,7 +154,6 @@ controls.enableDamping = true;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.8;
 
-// Lights (env map does most of the work; these add definition)
 scene.add(new THREE.HemisphereLight(0xbcd0e6, 0x1a1a22, 0.5));
 const key = new THREE.DirectionalLight(0xffffff, 2.0); key.position.set(1, 0.6, 1.4); scene.add(key);
 const fill = new THREE.DirectionalLight(0x9fb4cc, 0.8); fill.position.set(-1, -0.4, 0.6); scene.add(fill);
@@ -124,43 +162,63 @@ const material = new THREE.MeshStandardMaterial({
   color: 0xb9c2cb, metalness: 0.95, roughness: 0.33, side: THREE.DoubleSide,
 });
 
-let mesh = null;
-function buildMesh(nCell) {
+let mesh = null, grid = null, spanX = 0, spanY = 0;
+
+function buildMesh(nx, ny) {
   if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); }
-  const span = nCell * P;
-  const segs = nCell * RES_PER_CELL;
-  const geo = new THREE.PlaneGeometry(span, span, segs, segs);
+  if (grid) { scene.remove(grid); grid.geometry.dispose(); }
+  spanX = nx * P; spanY = ny * P;
+  const segX = nx * RES_PER_CELL, segY = ny * RES_PER_CELL;
+  const geo = new THREE.PlaneGeometry(spanX, spanY, segX, segY);
   const pos = geo.attributes.position;
+  const col = new Float32Array(pos.count * 3);
   for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i) + span / 2;             // shift to [0, span]
-    const y = pos.getY(i) + span / 2;
-    pos.setZ(i, zTop(x, y));
+    const x = pos.getX(i) + spanX / 2, y = pos.getY(i) + spanY / 2;
+    const z = zTop(x, y); pos.setZ(i, z);
+    const c = heat(z / H_LARGE); col[i * 3] = c[0]; col[i * 3 + 1] = c[1]; col[i * 3 + 2] = c[2];
   }
   pos.needsUpdate = true;
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
   geo.computeVertexNormals();
   mesh = new THREE.Mesh(geo, material);
   scene.add(mesh);
-  controls.target.set(0, 0, H_N / 2);
-  return span;
+
+  // base grid at z=0, one division per pitch cell -> conveys scale + the square lattice
+  grid = new THREE.GridHelper(Math.max(spanX, spanY), Math.max(nx, ny), 0x3a4757, 0x232c38);
+  grid.rotation.x = Math.PI / 2;                   // lay into the XY plane (Z up)
+  grid.visible = document.getElementById('grid').checked;
+  scene.add(grid);
+
+  controls.target.set(0, 0, H_LARGE / 2);
+  document.getElementById('scalecap').innerHTML =
+    `1 cell = <b>340 mm</b> &middot; panel = <b>${spanX} &times; ${spanY} mm</b><br>` +
+    `relief: large <b>54</b> / small <b>37.2 mm</b>`;
 }
 
-let span = buildMesh(4);
-
 function setView(kind) {
-  const d = span * 1.15;
+  const d = Math.max(spanX, spanY) * 1.15;
   if (kind === 'top')   camera.position.set(0.01, 0.01, d * 1.4);
   if (kind === 'iso')   camera.position.set(d * 0.9, -d * 0.9, d * 0.7);
   if (kind === 'front') camera.position.set(0, -d * 1.3, d * 0.25);
   controls.update();
 }
-setView('iso');
+
+buildMesh(4, 4); setView('iso');
 
 // ---- UI ----
 const $ = id => document.getElementById(id);
 $('nslider').addEventListener('input', e => {
-  const n = +e.target.value; $('nval').textContent = n;
-  span = buildMesh(n); setView('iso');
+  const n = +e.target.value; $('nval').textContent = n; buildMesh(n, n); setView('iso');
 });
+$('panelbtn').addEventListener('click', () => { buildMesh(3, 9); setView('iso'); });
+$('cmap').addEventListener('change', e => {
+  material.vertexColors = e.target.checked;
+  if (e.target.checked) { material.metalness = 0.15; material.roughness = 0.8; material.color.set(0xffffff); }
+  else { material.metalness = 0.95; material.roughness = 0.33; material.color.set(0xb9c2cb); }
+  material.needsUpdate = true;
+  $('legend').style.display = e.target.checked ? 'block' : 'none';
+});
+$('grid').addEventListener('change', e => { if (grid) grid.visible = e.target.checked; });
 $('wire').addEventListener('change', e => material.wireframe = e.target.checked);
 $('autorot').addEventListener('change', e => controls.autoRotate = e.target.checked);
 $('top').addEventListener('click', () => setView('top'));
