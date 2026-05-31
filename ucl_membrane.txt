@@ -1,0 +1,905 @@
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+1 
+1 
+Nonlinear structural behaviour of membrane-type LNG carrier cargo 
+containment systems under impact pressure loads at −163°C  
+J.M. Sohna, D.M. Baea, S.Y. Baea and J.K. Paikb,c*  
+a Department of Naval Architecture and Marine Systems Engineering, Pukyong National 
+University, Busan 48513, Korea; b Department of Naval Architecture and Ocean Engineering, 
+Pusan National University, Busan 46241, Korea; cDepartment of Mechanical Engineering, 
+University College London, London WC1E 7JE, UK 
+This paper is a sequel to the paper dealing with quasi-static responses previously studied by 
+the authors. The structural failure of membrane -type liquefied natural gas carrier (LNGC) 
+cargo tank is an important issue in the construction of ultra-large an LNG carrier. However, 
+quasi-static analysis to investigate the structural failure is difficult and tends to give 
+conservative results. To compensate the weak points of the quasi -static analysis, a 
+procedure for the dynamic analysis was developed to assess the structural failure using 
+nonlinear finite element method.  
+A nonlinear finite element method is employed to model metal membrane, insulation and 
+surface contacts. Various element formulations are tested at different points along a 
+corrugated surface to optimise the accuracy of the model with respect to computation time. 
+Material properties used in the model are calibrated based on experimentally measured 
+values at cryogenic conditions (–163°C). The model is used to predict the structural failure 
+under different impact pressure load s and loading patterns . It is concluded that the 
+structural damage is less likely to occur under 30 bar.  
+ 
+Keywords: l iquefied natural gas carrier  (LNGC); membrane-type LNGC cargo 
+containment system; dynamic structural analysis; sloshing impact; finite element method 
+1.    Introduction 
+The liquefied natural gas ( LNG) shipping market driven by growth in global liquefaction 
+capacity and nuclear -phobic policies has evolved over the last decade. In recent years, the 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+2 
+2 
+average size of an LNG carrier (LNGC) has bee n increased to maximise transport efficiency. 
+One concern about the LNG tanks is that large sloshing impact pressure can cause structural 
+failure resulting in liquid leaking through the primary barrier into the membrane space. When 
+LNG leaks into the prima ry barrier, the pressure in the primary insulation will built up the 
+temperature of steel in the inner hull will drop. Thus, understanding the  structural behaviour of 
+the LNGC cargo containment system is important to minimize  risk. An LNGC cargo 
+containment system is composed of a primary barrier, plywood and reinforced polyurethane 
+foam (RPUF). This distinctive structure has been the focus of many studies on the structural 
+integrity of membrane -type cargo systems. Some other studies focused on the structur al 
+responses of LNGC insulation system (Lee and Kim 2006, Chun et al. 2009).  The present study 
+evaluates the structural behaviour of the primary barrier, which is in direct contact with LNG. It 
+also examines structural failure, which is a challenging issue  in the design of LNGC cargo 
+containment systems.  
+There are three levels of strength assessment for LNG containment systems: static stress finite 
+element (FE) analysis, dynamic FE analysis and dynamic FE analysis accounting for fluid –
+structure interaction  (FSI) ( ABS 2009 ). Static stress analysis is used to determine principal 
+features such as maximum stress and excessive deformation ( Wang et al. 2008, Paik et al. 2011). 
+Transient FE analysis is used to understand dynamic characteristics using the pressure –time 
+history obtained from computational fluid dynamics (CFD)  or sloshing model tests. FSI analysis 
+is used to model the sloshing effect by considering both fluid flow and structural deformation 
+(Lee et al. 2004, 2013, 2015) . ABS guidelines (2009) state th at dynamic analysis should be 
+preferentially conducted; FSI analysis is required if systems do not pass dynamic analysis. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+3 
+3 
+In the present study, nonlinear structural responses  are assessed for various values of an impact 
+magnitude for dynamic analysis. Nume rical techniques are introduced for evaluating the 
+nonlinear structural behaviour of membrane -type LNGC systems by considering the failure 
+strain under  cryogenic conditions . Sloshing loads are described using the triangular impact 
+pressure in the time doma in, and three types of loading patterns are used to consider the load 
+direction based on the filling level of LNG. The present observations suggest that the proposed 
+methodology will be applicable to FSI analysis.  
+2.    Modelling techniques  
+This study fo llows the framework of Paik’s FE model, which considers a corrugated structure, 
+insulation system and mastic (Paik et al. 2011).  For dynamic analysis, an explicit code is 
+appropriate for solving structural problems related to short duration events with sev ere loadings. 
+Implicit analysis requires a numerical solver to invert the stiffness matrix several times over the  
+time step. This matrix inversion is an expensive operation, especially for large models. However, 
+explicit code does not require this step.  This study uses an explicit code to solve the dynamic 
+solution to include treatment of contact and material nonlinearities and achieve a desired 
+accuracy with less computation time. The following sections describe methods used to apply 
+explicit computations to LNGC containment systems. 
+2.1    LNGC containment system  
+A membrane-type LNGC cargo tank system is a cryogenic liner composed of a primary metallic 
+membrane positioned on top of a prefabricated insulation panel , which  includes a complete 
+secondary memb rane, as shown in Figure 1. The primary  membrane is folded to create 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+4 
+4 
+corrugations; it is made of stainless steel 304 L  and is 1.2 mm thick. The primary membrane 
+directly contains LNG cargo and is fixed to an insulation system. The insulation system consists 
+of a load -bearing system made from prefabricated panels of RPUF; this load-bearing system is 
+used in  the primary and secondary insulation layers as well as the secondary membrane. The 
+total insulation thickness is 270  mm. Insulation panels are bonded to the inner hull using resin 
+ropes, which serve a double purpose: anchoring the insulation and evenly distributing the load 
+(GTT 2016).  
+Figure 1. (a) Mark III stainless steel corrugated membrane and (b) Mark III prefabricated panel 
+(GTT 2016).  
+2.2    Finite element modelling  
+FE modelling is used to transform a physical system into a mathematical model. Isoperimetric 
+quadrilateral elements are used to represent the 1.2-mm-thick plate and knot, which is the 
+intersection of small and large corrugations ; each modelled element comprise s four nodes with 
+six degrees of freedom per node . The insulation system is idealised as a cuboid  and modelled 
+using quadratic, 8-node, solid elements with nodal rotation. 
+The location of high stress moves as stress waves propagate through the mesh. FE models with a 
+fine mesh capture this complexity and yield more accurate results  with an  increase in the 
+computation time. The mesh size must be optimised to balance  accuracy with the computation 
+time. Similar to our previous study, a fine mesh is applied only to the corrugated plate to achieve 
+accurate FEA results . Compared with corrugated plate elements, t he i nsulation system uses a 
+coarse mesh that is five times larger ; this reduces the computation time. The FE analysis 
+generates 40,000 four -node shell elements and 120,000 eight -node solid element s (Paik et al., 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+5 
+5 
+2011).  
+Insulation is modelled as a single system that shares nodes on plywood, triplex and RPUF.  A 
+corrugated plate model is simply positioned on top of a prefabricated insulation panel. However, 
+the mesh density significantly varies between the plate and insulation; thus, contact elements are 
+needed. Single-surface contact algorithm is used for the corrugated plate; all external surfaces in 
+the model are searched to determine if penetration has occurred . Interaction contact is detected 
+between the corrugated plate and insulation when a contacting node penetrates the target surface. 
+The insulation system is selected as the target body because it comprises a coarse mesh, and the 
+corrugated plate is selected as the contact body  because it comprises  a relatively finer mesh 
+(ANSYS/LS-DYNA 2015).  
+To ensure a stable and accurate solution, the time step used in the explicit code is limited by the 
+Courant–Friedrichs–Lewy (CFL) condition (Courant et al. 1967) . The time step  in the explicit 
+code is  limited such that a stress wave cannot tra vel further than the smallest characteristic 
+element dimension in a mesh during a single time step. The minimum value of 
+/hc  for all 
+elements in the model is used to calculate the time step. 
+h  is the characteristic dimension of an 
+element, the area of the element divided by its maximum edge; 
+c  is the speed of sound in the 
+local material of an element. For a mesh with a characteristic dimension of 1  mm and stainless 
+steel elements in which the speed of sound is 5790 m/s, the resulting stability time step would be 
+approximately 0.17 μs. This value implies that the number of time ste ps required to solve the 
+simulation is dictated by the smallest element in the model. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+6 
+6 
+2.3    Element formulation 
+Saving CPU time is a primary concern when performing a series of computations. Reduced-node 
+integration elements save CPU time by minimi sing element processing. Single-point integration 
+elements are robust for modelling large deformations; however, they are susceptible to spurious,  
+zero-energy deformation modes. These so-called hourglass modes are nonphysical deformation 
+modes that occur in undis integrated elements and produce no stress.  The accuracy of stress 
+calculations is directly related to the number of integration points.  There are two methods that 
+can be used to solve the hourglass problem. An hourglass-control algorithm can be used 
+whenever one-point integration is necessary. Alternately, integrated elements  may be used,  
+which are computationally costly.  
+This section investigates the effects of element formulations on the structural behavio ur of the 
+model to optimise time efficiency and a ccuracy of results . Two reduced -integration elements 
+(ELFORM = 1 and 2) and 2  × 2 integrated elements (ELFORM  = 6 and 16) are considered for 
+the corrugated panel. ELFORM 2 and 16  are based on  the Reissner–Mindlin kinematic 
+assumption, which includes mid -surface displacement s plus rotations to describe shear 
+deformation. ELFORM 1 and 6 are based on the formulation of degenerated continuum elements. 
+Deformations in the z direction due to the application of 10 bar pressure are summarised in Table 
+1 for these f our shell element formulation s. S everal monitoring points  were selected  on a 
+corrugated metal surface, as shown in Figure 2. Deformations listed in Table 1 are similar for all 
+shell element formulation s tested . The gap is only approximately 5%, integrated elements are 
+1.5–3 times more expensive than reduced elements. Moreover, the hourglass energy is much less 
+than the internal energy in reduced elements. Therefore, Belytschko–Tsay elements (ELFORM = 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+7 
+7 
+2) are used to improve time efficiency.  
+ 
+Figure 2. Measurement (monitoring) points of the corrugated membrane. 
+Table 1. Comparison of displacements and simulation times for different shell element 
+formulations. 
+ 
+The deformation magnitude depends on a monitoring point; from greatest to smallest 
+deformation, the order of monitoring points is as follows: (E) the middle of the large corrugation, 
+(D) the middle of the small corrugation, (B) the knot, (A) the vertex of the small corrugation and 
+(C) the vertex of the large corrugation. Point E has the largest curvature and exhibits the largest 
+deformation. Point C exhibits the smallest deformation because the vertex can only move 
+upward. Points G and F have  the same displacement as point s D and E because of  their 
+symmetric geometry.  
+ 
+2.4    Material properties 
+Paik et al. (2011) performed tensile coupon tests to obtain the engineering stress –engineering 
+strain relation for stainless steel STS304 at 22°C and −163°C. DNV (2006)  summarized the 
+material stiffness properties of plywood laminate, plywood plates and R PUF at room 
+temperature and cryogenic conditions. Arswendy and Moan (2015) observed the crushing and 
+buckling failures of plywood components. 
+Structural behaviour is directly affected by material properties, especially by yield stress and 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+8 
+8 
+failure strain. These two properties are closely related to the effect s of strain rate on the sloshing 
+impact load. Cowper and Symonds (1957) proposed the following equations to relate strain-rate 
+sensitivity to the dynamic yield strength and dynamic failure strain.  
+ 
+1/
+1.0
+q
+Yd
+Y C
+ 
+
+ 
+,                                                                                (1) 
+11/
+1
+q
+fcd
+fc C
+ 
+
+
+  
+,                                                                             (2) 
+Where, 
+C  and 
+q  are experimentally determined coefficients (see Table 2). The dynamic yield 
+strength (normalised by the static yield strength) versus strain rate is shown in Figure 3 for the 
+304 stainless steel, mild steel and high-tensile steel. The material yield strength increases with an 
+increase in the strain rate. It is evident that coefficients 
+C  and 
+q  depend on the material type, 
+among other factors. The rate of increase of 
+/Yd Y  is the steepest for mild steel. 
+ 
+Table 2. Coefficients of the Cowper–Symonds constitutive equation for different steel types. 
+ 
+Figure 3. Plot of the dynamic yield strength (normalised by the static yield strength) versus strain 
+rate for 304 stainless steel, mild steel and high-tensile steel. 
+ 
+ANSYS/LS-DYNA (2015) provides a Cowper–Symonds strain-rate model (1957) that scales the 
+yield stress with the factor ; 
+C  and 
+q  are easily determined for different  materials. Failure strain 
+is defined as the tensile strain at which failure begins. Hughes and Paik (2010) reported that the 
+critical failure strain 
+fc  should be expressed as a function of the element size and plate 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+9 
+9 
+thickness in an FE analysis: 
+2
+1
+d
+fc
+f
+td s
+ 
+ 
+,                                                                               (3) 
+Where, 
+t  is the thickness of the element, 
+s  is the length of the element, 
+1d  and 
+2d are the test 
+constants, 
+f  is the material failure strain obtained from tensile coupon tests under quasi-static 
+loading conditions and 
+  is the adjustment factor associated with local strains due to bending or 
+folding effects. For very thin walls, 
+  = 1.0.  
+A numerical tensile test was conducted using ANSYS/LS -DYNA code ( 2015) to define the 
+failure strain 
+fc  of steel at −163°C. The f ailure strain  used for FE was carefully selected to 
+ensure that resulting FE c omputations matched the experimental material behaviour determined 
+from tensile tests  (Paik et al . 2011). Figure 4 shows t he FE model and an experimental sample 
+immediately after fracturing under an axial tensile load. A trial -and-error technique was applied 
+to search for the failure strain to be used for FEA to ensure the equality of computational and 
+experimental results ; the trial-and-error analyses of the ANSYS/LS -DYNA code  (2015) are 
+shown in Figure 5. The corrugated membrane was 1.2  mm thick, mesh size was 1 mm  and 
+critical failure (engineering) strain of the material was determined as 
+1.726fc f   with 
+1d =1.667, 
+2d
+=0.197 and 
+  = 1.0. 
+ 
+Figure 4. (a) A tensile coupon test specimen, (b) its FEM prediction. 
+Figure 5. Comparison of the engineering stress–engineering strain relation between the test and 
+explicit LS-DYNA simulation with a mesh size of 1 mm at −163°C. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+10 
+10 
+The relation between the failure strain used for FEA and the mesh size is  shown in Figure 6 for 
+several steel types. The FEA failure strain tends to decrease  as the mesh size increases , 
+approaching the experimental value of the  failure strain. On t he basis of these findings, the true 
+stress–true strain relation of the material was adjusted by expanding the value of the failure strain, 
+as shown in Figure 7. 
+ 
+Figure 6. Critical failure strain used for the LS-DYNA FE simulation as a function of mesh si ze 
+under quasi-static loading conditions. 
+Figure 7. True stress–true strain curve with an extended failure strain and a mesh size of 1 mm. 
+3.    Sloshing impact load 
+Model tests and CFD simulations (Lee et al. 2004, Kuo et al. 2009, Brizzolara 2011, Kim et  al. 
+2015) have revealed significant variation in sloshing loads. This has been shown in . Lee et al. 
+(2004) specifies that the filling level affected the peak value of pressure for tank No.2 in a 138 k 
+LNGC; a 30% filling level induced a pressure of up to 30 bar. ABS guidelines (2009) summarise 
+the general pattern of sloshing impact loads from model tests. They state that most of the 
+sloshing impact load has a symmetric loading pattern, or that skewness closes to 1.0.  The 
+skewness parameter S is introduced to define the pattern of a triangular impulse:  
+(2 ) / ( )S risetime duration
+.                                                                (4) 
+An isosceles triangle is used to represent the sloshing impact load, as shown in Figure 8. It is 
+drawn such that 20% of the peak pressure remains after 90% of the duration; this accounts for 
+the steady-state static pressure of cargo. 
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+11 
+11 
+Figure 8. Idealised time history of the sloshing impact pressure.  
+ 
+It is not easy to directly apply sloshing load  in CFD and model test to structural analysis owing 
+to diversity and uncertainties . Nevertheless, sloshing loads exhibit a general trend that large 
+pressures are correlated with short rise times, down to <1.0 ms. Also, a significant portion of the 
+peak pressure is under 10 b ar. Based on the general trend, this study set the peak pressure from 
+5–30 bar. The loading direction, which is related to the filling level, is also considered,  as shown 
+in Figure 9. In the present study, three angles of attack were considered, i.e. 
+  = 90°, 45° and 0°. 
+The last two cases, i.e. 
+  = 45 ° and 0 °, were considered with respect to both large and small 
+corrugations.  
+ 
+Figure 9. Angles of attack of sloshing impacts. 
+However, depending on the magnit ude of the load, the duration time is beyond classification; 
+therefore, the duration time is excluded from the variables. Eigenvalue analysis is performed so 
+that the duration time is involved in the dynamic region. This is because the structural behaviour  
+does not depend on the duration in a quasi-static region, and there is a rapid change in an impulse 
+region. The natural period of a membrane -type LNGC cargo containment system is 
+approximately 1.4 ms. This value is similar to the natural frequency of a Ma rk III cargo 
+containment system, 1.0 –2.0 ms.  Finally, the duration time 
+3ms   provides the maximum 
+response, except in the case when resonance was selected.  
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+12 
+12 
+4.    Results and Discussion 
+Structural damage to a primary barrier must be avoided. In the present study, structural damage 
+is defined as the effective plastic strain exceeds of 0.623 failure strain. The termination time for 
+structural analysis is set as 100 ms to capture the  structural failure of membrane -type LNGC 
+cargo tanks, i.e. the analysis continues after sloshing load is unloaded. Figures 10 shows the peak 
+pressure versus time until first  failure. First failure occurs around the knot and folded structure. 
+However, this damage is caused by the accumulation of strain energy due to effect of 
+continuance time regardless of sloshing loads. T he structural failure of membrane-type LNGC 
+cargo tank s is undetected until peak pressures up to 30 bar  at the duration time 
+3ms  . 
+However, large sloshing loads are corr elated with short rise times, it can be concluded that the 
+probability of structural failure is very low.  
+ 
+Figure 10. Peak pressure against the time until first failure occurs. 
+Furthermore, the yield limit of the primary membrane are evaluated to determin e the structural 
+strength of a containment system. Dynamic FE analysis on the containment system is performed 
+to obtain the stress–strain field. The stress must satisfy the following condition:   
+max
+eq
+c 
+,                                                                               (5) 
+Where, 
+c is the permissible normal stress defined as the multiple of the ultimate strength (
+Y ) 
+of a material and the strength reduction factor. The ultimate strength of STS304 is 1192  MPa at 
+−163°C (Paik et al. 2011), and the strength reduction factor are 0.8–1.0 for ultimate strength  
+(ABS 200 9); 0.8 is a more conservative  estimate. The von Mises stress es are  summarised in 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+13 
+13 
+Table 3 for different  loading patt erns. Shaded cells indicated that the calculated value of the 
+stress exceeds the criterion for ultimate strength . It appears that a membrane-type LNGC cargo 
+tank exhibits sufficient structural strength under a peak pressure of 10 bar regardless of the 
+loading pattern.  
+Notably, there are specific loading pattern s that do not  satisfy the maximum-stress criteri on, 
+although the probability is low. In particular, both large and small corrugation s are dented when 
+the impact sloshing load is horizontally and diag onally applied, as shown in Figure 11. 
+Maximum stress is concentrated on the knot and folded structure , which deform  less than the 
+corrugations. The peak pressure is 30 bar when the angle of attack is 45° in the −x direction; this 
+exceeds the yield stress, but failure does not occur because of modified of the stress–strain curve 
+in FE analysis.  
+ 
+Table 3. Summary of von Mises stresses for different loading patterns. 
+ 
+Figure 11. von Mises stress distributions for impact pressures applied in x and y directions. 
+ 
+Dynamic FE analysis is performed to obtain the maximum deformation fields in the containment 
+system. The following condition must be satisfied (Paik and Shin, 2006): 
+ 
+max cww  ,                                                                                 (6) 
+Where,
+cw  is the permissible deformation of each component in m etres. This is the value  
+recommended by the manufacturer of the LNGC containment system ; wc is sometimes 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+14 
+14 
+normalised by 1/1000th of a tank length. Two types of deformations were observed as shown in 
+the Figure 12. One is the maximum value in the duration time and another is the permanent set 
+after release of the loading. These are similar in tendency and the maximum gap is within 4 mm.  
+Figure 12. Comparisons between maximum and permanent deflection. 
+ 
+The maximum  deformation of the primary barrier for a membrane-type LNGC containment 
+system is investigated by varying the loading pattern and observing several monitoring points, as 
+shown in Figures 13–17. Deformation increases as the applied pressure increases. Small 
+deformations tend to linearly respond to pressure, while large deformation makes dramatically 
+change starting from 15bar.  
+For example, for a 217 k LNGC containment system, the length o f tank No.2 is 41 m, and  
+cw  is 
+defined as 40 mm. The allowable peak pressure is approximately 15.33bar. This peak pressure is  
+more than 6–7 times the maximum cargo pressure load of today ’s very large membrane -type 
+LNGCs. Also, this value is 12% less than static structural strength, it is reasonable when 
+considering the amplitude of the dynamic load. 
+ 
+Figure 13 Peak pressure versus deformation of the corrugation at the angle of 
+  = 90° of 
+sloshing pressure. 
+Figure 14. Peak pressure versus deformation of large corrugation; 
+  = 45° in the 
+x  direction. 
+Figure 15. Peak pressure versus deformation of the small corrugation at the angle of attack; 
+  = 
+45° in the 
+y  direction. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+15 
+15 
+Figure 16. Peak pressure versus deformation of large corrugation at the angle of attack; 
+  = 0° in 
+the 
+x  direction. 
+Figure 17. Peak pressure versus deformation of the small corrugation at the angle of attack; with 
+
+ = 0° in the 
+y  direction. 
+ Diagonally s loshing loads applied to large corrugations caused the largest deformations . 
+Deflection is the smallest when the impact pressure is applied in the 
+z  direction; it exhibits a 
+linear structural response. This suggests that the structural behaviour may be overestimated when 
+only the vertical loading on an LNGC cargo tank is considered.  
+The point at which the maximum deflection was varied depends  on the loading direction. 
+Regions of curvature on the corrugation are much less  resistant to deflection than the vertex of 
+the corrugation. In addition, the loading surface seems to  deflect more. The loading surface is 
+likely to endure greater tensile stress  due to unfolding , while the opposite surface is under 
+compressive stress due to bending. Even if a large deformation occurs at the loading surface, the 
+opposite surface is more likely to lose structural strength due to buckling.  
+The effect of the angle of attack on the deformation of the corrugation  is shown in  Figures 18 
+and 1 9 for sloshing impacts applied to the large and small corrugation s, respectively . The 
+maximum deformation occurs at Point E when the sloshing impacts are applied to the large 
+corrugation and at Point F when the sloshing impacts are applied to the small corrugation.  The 
+angle of attack 
+  = 45° causes the largest deformation in the corrugation . Also, t he angle of 
+attack has a large impact on the deformation as the sloshing load increases.  
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+16 
+16 
+Figure 18. Effect of the angle of attack on the deformation of the corrugation at monitoring point 
+E for impact pressure applied in the 
+x  direction. 
+Figure 19. Effect of the angle of attack on the deformation of the corrugation at monitoring point 
+F for impact pressure applied in the 
+y  direction. 
+5.    Concluding remarks 
+The objective of th e present paper wa s to investigate the structural behaviour of a membrane 
+(Mark III)-type LNGC cargo containment system under sloshing impact pressure using nonlinear 
+FEM. The FE structural modelling techniques were investigated in terms of selection of element, 
+shell element formulation and technique for considering material properties. Based on numerical 
+analysis, the elastic–plastic deflection characteristics of the corrugated membrane were examined. 
+The following conclusions were drawn: 
+ Belytschko–Tsay shell element formulations are robust to large deformations and prevent 
+zero-energy modes by using fine mesh size . These elements were selected to investigate 
+the structural behaviour of the primary barrier in an LNG cargo container.  
+ The critical failure strain should be a djusted by considering the element size and plate 
+thickness for FE analysis. As the mesh size increases , the FE failure strain decrease s 
+approaching the failure strain obtained experimentally from tensile tests. 
+ The primary barrier of LNG s cargo containers has sufficient structural integrity at 15 bar 
+under sloshing impact loads. Structural damage, defined as exceeding the failure strain, 
+is less likely to occur under 30bar.  
+ The largest deflection occurs for diagonally appl ied loads, follow ed by  horizontal and 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+17 
+17 
+vertical loads. It is important to consider the loading direction s when investigating the 
+nonlinear structural response under sloshing impact load s. A primary barrier with 
+curvature that is not active in load-bearing can lose structural strength due to buckling. 
+ The nonlinear FEM technique developed in this study  can be  applied to predict the 
+relation between sloshing impact pressure and corrugation deformation.  
+The insights developed in the present study will be very useful in the structural design o f 
+corrugated membranes subject to sloshing impact pressure. Further studies are expected  to 
+identify the design loads for sloshing impact  using the probabilistic approach. Also, the sloshing 
+loading scenarios should be set by accounting  for the tank fillin g level, rolling angle and the 
+duration and amplitude of tank motion.  
+Acknowledgements 
+This work was supported by the Pukyong National University Research Fund in 2015 (2015 -
+1258). 
+REFERENCES 
+ABS. 2009. Guidance notes on strength assessment of membrane -type LNG containment systems under sloshing 
+loads. Houston (TX): American Bureau of Shipping. 
+ANSYS LS-DYNA. 2015. Version 16.1. Canonsburg (PA): ANSYS. 
+Arswendy A and Moan T. 2015. Strength and stiffness assessment of an LNG containment system – crushing and 
+buckling failure analysis of plywood components. Engineering Failure Analysis. Published online.  
+Brizzolara S, Savio L, Viviani M, Chen Y, Temarel P, Couty N, Hoflack S, Diebold L, Moirod N and Iglesias AS. 
+2011. Comparison of experimental and numerical sloshing loads in partially filled tanks. Ships and Offshore 
+Structure 6(1-2):15-43.  
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+18 
+18 
+Chun MS, Kim MH, Kim WS, Kim SH and Lee JM. 2009. Experimental investigation on the impact behavior of 
+membrane type LNG carrier insulation system. Journal of Loss Preven tion in the Process Industries 22:901 -
+907. 
+Courant R, Friedrichs K and Lewy H. 1967. On the partial difference equations of mathematical physics.  New 
+York (NY): IBM Journal. 
+Cowper GR and Symonds PS. 1957. Strain -hardening and strain -rate effects in the im pact loading of cantilever 
+beams. Technical Report No. 28. Division of Applied Mathematics. Providence (RI): Brown University.  
+DNV. 2006. Classification Notes No.30.9: Sloshing analysis of LNG membrane tanks. Oslo (Norway): Det Norke 
+Veritas.  
+Forrestal MJ and Sagartz MJ. 1978. Elastic -plastic response of 304 stainless steel beams to impulse loads. Journal 
+of Applied Mechanics 45: 685-687. 
+Gaztransport & Technigaz. 2016. Saint -Rémy-lès-Chevreuse (France): http://www.gtt.fr/en/technologies -
+services/our-technologies/mark-iii. 
+Hsu SS and Jones N. 2004. Dynamic Axial Crushing of Aluminum Alloy 6063 -T6 Circular Tubes. Latin American 
+Journal of Solids and Structures 1(3): 277-296. 
+Hughes OF and Paik JK . 2010. Ship structural analysis and design. Jersey City  (NJ): The Society of Naval 
+Architects and Marine Engineers.  
+Kim SY, Kim KY and Kim Y. 2015. Comparative study on pressure sensors for sloshing experiment. Ocean 
+Engineering 94:199-212. 
+Kuo JF, Campbell B, Ding Z, Hoie SM, Rinehar, AJ, Sandstrom, RE and Yung TW . 2009. LNG tank sloshing 
+assessment methodology -The new generation. International Journal of Offshore and Polar Engineers 19(4): 
+241-253. 
+Langdon GK and Schleyer GS. 2005. Inelastic deformation and failure of ¼ scale profiled stainless steel blast wall 
+panels. Part II: analytical modelling considerations. International Journal of Impact Engineering 31(4): 371 -
+399. 
+Lee H, Kim JW and Hwang C. 2004. Dynamic strength analysis for membrane type LNG containment system due 
+to sloshing impact load. ABS Technical papers. Houston (TX): American Bureau of Shipping. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+19 
+19 
+Lee CS, Cho JR, Kim WS, Noh BJ, Kim MH and Lee JM. 2013. Evaluation of sloshing resistance performance for 
+LNG carrier, International Journal of Naval Architecture Ocean Engineering 5:11 -20. 
+Lee JM and Kim MH. 2006. Impact strength assessment of LNG carrier insulation system. Trans. Pfaffikon 
+(Switzerland): Tech Publications. 
+Lee SE, Kim BJ, Seo JK, Ha YC, Matsumoto T, Byeon SH and Paik JK. 2015. Nonlinear impact response analysis 
+of LNG FPSO cargo tank structures under sloshing loads. Ships and Offshore Structures. Published online.  
+Paik JK . 2007. Practical techniques for finite element modelling to simulate structural crashworthiness in ship 
+collision and grounding (Part I: Theory). Ships and Offshore Structures 2(1): 69-80. 
+Paik JK and Chung JY . 1999. On dynamic / impact tensile strength characteristics of thin high tensile steel 
+materials for automobiles. Transactions of the Korea Society of Automotive Engineers 7(2):268-278. 
+Paik JK and Kim TH . 2009. Safety case study of MARK III type LNG carrier cargo containment systems under 
+dropped object impacts. Department of Naval Architecture and Ocean Engineering. Busan (Korea): Pusan 
+National University.  
+Paik JK, Lee JM, Shin YS, Wang G. 2004. Design principles and criteria for ship structures under impact pressure 
+loads arising from sloshing, slamming and green sea. SNAME Transactions 112:292-313. 
+Paik JK and Shin YS. 2006. Structural damage and strength criteria for ship stiffened panels under impact pressure 
+actions arising from sloshing, slamming and green water. Ships and Offshore Structures 1 (3):249-256. 
+Paik JK, Sohn JM, Shin YS, Thayamballi AK and Suh YS. 2011.  Nonlinear structural analysis of membrane -type 
+LNG carrier cargo containment system under cargo  static pressure loads at the cryogenic condition with a 
+temperature of -163°C. Ships and Offshore Structures 6(4): 311-322. 
+Paik JK and Thayamballi AK . 2007. Ship-shaped offshore installations: design, building, and operation , 
+Cambridge (England): Cambridge University Press. 
+Wang B, Yu H, Basu R, Lee H, Kwon JC, Jeon BY, Kim JH, Daley and Kendrick A. 2008. Structural response of 
+cargo containment systems in LNG carriers under ice loads. International Conference and Exhibition on 
+Performance of Ships and Structures in Ice. Banff (Canada): July 20-23.  
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+20 
+20 
+ 
+  
+(a) (b) 
+Figure 1. (a) Mark III stainless steel corrugated membrane and (b) Mark III prefabricated panel 
+(GTT 2016).  
+A
+B
+C
+E
+D F
+G
+x
+yz
+ 
+Figure 2. Measurement (monitoring) points of the corrugated membrane. 
+ 
+0.0001 0.001 0.01 0.1 1 10 100 1000 10000
+(1/s)
+0.0
+0.5
+1.0
+1.5
+2.0
+2.5
+3.0
+3.5
+C=40.4, q=5
+Yd
+Y
+
+
+
+C=100, q=10
+C=3200, q=5
+C=5000, q=5.3
+C=12500, q=4.5
+C=39033 
+q=5.136
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+21 
+21 
+Figure 3. Plot of the dynamic yield strength (normalised by the static yield strength) versus strain 
+rate for 304 stainless steel, mild steel and high-tensile steel. 
+  
+(a) 
+ 
+(b) 
+Figure 4. (a) A tensile coupon test specimen, (b) its FEM prediction. 
+ 
+0 0.1 0.2 0.3 0.4 0.5
+0
+400
+800
+1200
+1600
+Mesh size: 1mm
+Engineering stress(MPa)
+Engineering strain
+FEA
+Test
+fc=0.308
+fc=0.623
+fc=0.856
+f=0.361 for test
+ 
+Figure 5. Comparison of the engineering stress–engineering strain relation between the test and 
+explicit LS-DYNA simulation with a mesh size of 1 mm at −163°C. 
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+22 
+22 
+0 5 10 15 20 25 30
+0
+1
+2
+3
+4
+5
+LS-DYNA Explicit
+: t = 2mm(Steel) at room temp.
+: t = 1mm(Steel) at room temp.
+f
+fc
+ε
+ε
+Mesh size(mm)
+: t = 1.2mm(STS 304) at -163°C
+ 
+Figure 6. Critical failure strain used for the LS-DYNA FE simulation as a function of mesh size 
+under quasi-static loading conditions. 
+ 
+0 0.2 0.4 0.6 0.8
+0
+400
+800
+1200
+1600
+2000
+Mesh size: 1mm
+Stress(MPa)
+Strain
+Extended true 
+stress- true strain 
+curve
+True stress-true 
+strain curve
+ f=0.308  fc=0.623
+ 
+Figure 7. True stress–true strain curve with an extended failure strain and a mesh size of 1 mm. 
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+23 
+23 
+Time0.5
+pmax
+0.2pmax
+0.9 
+Pressure
+ 
+Figure 8. Idealised time history of the sloshing impact pressure.  
+  
+ 
+Figure 9. Angles of attack of sloshing impacts. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+24 
+24 
+ 
+τ
+Time until first fracture (ms)
+Peak pressure (bar)
+1.2mm-thick membrane
+15.33bar
+30bar
+ 
+Figure 10. Peak pressure against the time until first fracture occurs. 
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+25 
+25 
+ 
+ 
+(a) Impact pressure (pmax = 20 bar) applied in the −x 
+direction (angle of attack = 45°) 
+(b) Impact pressure (pmax = 20 bar) applied in the −y 
+direction (angle of attack = 45°) 
+Figure 11. von Mises stress distributions for impact pressures applied in x and y directions. 
+: Point C/sloshing in the –z direction (θ=90°)
+: Point E/sloshing in the –x direction (θ=45°)
+: Point F/sloshing in the –y direction (θ=45°)
+: Point E/sloshing in the –x direction (θ=0°)
+: Point F/sloshing in the –y direction (θ=0°)
+: Maximum deformation
+: Permanent deformation
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+26 
+26 
+Figure 12. Comparisons between maximum and permanent deflection. 
+ 
+ 
+Impact pressure applied in the –z direction
+(Angle of attack=90deg.)
+: Point A
+: Point B
+: Point C
+: Point D
+: Point E
+ 
+Figure 13 Peak pressure versus deformation of the corrugation at the angle of 
+  = 90° of 
+sloshing pressure. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+27 
+27 
+Impact pressure applied in the –x direction
+(Angle of attack=45deg.)
+: Point A
+: Point B
+: Point C
+: Point E
+: Point G
+ 
+Figure 14. Peak pressure versus deformation of large corrugation; 
+  = 45° in the 
+x  direction. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+28 
+28 
+Impact pressure applied in the –y direction
+(Angle of attack=45deg.)
+: Point A
+: Point B
+: Point C
+: Point D
+: Point F
+ 
+Figure 15. Peak pressure versus deformation of the small corrugation at the angle of attack; 
+  = 
+45° in the 
+y  direction. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+29 
+29 
+Impact pressure applied in the –x direction
+(Angle of attack=0deg.)
+: Point A
+: Point B
+: Point C
+: Point E
+: Point G
+ 
+Figure 16. Peak pressure versus deformation of large corrugation at the angle of attack; 
+  = 0° in 
+the 
+x  direction. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+30 
+30 
+Impact pressure applied in the –y direction
+(Angle of attack=0deg.)
+: Point A
+: Point B
+: Point C
+: Point D
+: Point F
+ 
+Figure 17. Peak pressure versus deformation of the small corrugation at the angle of attack; with 
+
+ = 0° in the 
+y  direction. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+31 
+31 
+Impact pressure applied in the –x direction (Point E)
+: ppeak=5bar
+: ppeak=10bar
+: ppeak=15bar
+: ppeak=20bar
+: ppeak=30bar
+ 
+Figure 18. Effect of the angle of attack on the deformation of the corrugation at monitoring point 
+E for impact pressure applied in the 
+x  direction. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+32 
+32 
+Impact pressure applied in the –y direction (Point F)
+: ppeak=5bar
+: ppeak=10bar
+: ppeak=15bar
+: ppeak=20bar
+: ppeak=30bar
+ 
+Figure 19. Effect of the angle of attack on the deformation of the corrugation at monitoring point 
+F for impact pressure applied in the 
+y  direction. 
+ 
+ 
+ 
+ 
+ 
+ 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+33 
+33 
+Table 1. Comparison of displacements and simulation times for different shell element 
+formulations. 
+ELFOR
+M 
+Displacement in the z direction (mm) Simulation time 
+(h:min:s) A B C D E 
+1 −1.44 −1.91 
+−0.50
+3 
+−1.93 −4.28 05:49:15  
+2 −1.45 −1.89 
+−0.52
+6 
+−1.91 −4.24 05:21:37 
+6 −1.45 −1.88 
+−0.50
+1 
+−1.90 −4.17 14:17:3 
+16 −1.44 −1.88 
+−0.50
+6 
+−1.90 −4.40 07:36:17 
+ 
+ 
+Table 2. Coefficients of the Cowper–Symonds constitutive equation for different steel types.  
+Material 
+C (1/s) 
+q  Reference 
+Mild steel 40.4 5   Cowper and Symonds (1957) 
+High-tensile steel 3,200 5   Paik and Chung (1999) 
+Stainless steel 
+(304L) 
+100 10   Forrestal and Sagartz (1978) 
+5,000 5.3   Langdon and Schleyer (2005) 
+39,033 5.136   Hsu and Jones (2004) 
+12,500 4.5   Paik and Kim (2009) 
+ 
+Table 3. Summary of von Mises stresses for different loading patterns. 
+For publication in Ships and Offshore Structures (Draft) 
+                                                                      
+34 
+34 
+ von Mises stress (MPa) 
+        direction  
+ppeak (bar) 
+−z  −x with  = 0° −x with  = 45°  −y with  = 0° −y with  = 45°  
+5 406.454 544.020 547.254 361.306 395.315 
+10 480.380 629.283 750.437 470.134 496.317 
+15 500.028 744.164 954.936 536.798 597.291 
+20 713.744 851.562 1076.360 590.309 715.904 
+30 738.710 1178.570 1267.900 685.860 953.179 
+ 
+ 

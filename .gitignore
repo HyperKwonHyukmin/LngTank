@@ -1,0 +1,10 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Temp / scratch artifacts
+_tmp_*.stl
+_*.py
+
+# Local Claude Code settings
+.claude/

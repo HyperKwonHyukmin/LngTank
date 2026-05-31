@@ -1,0 +1,92 @@
+ Interaction between wave impacts and corrugations of MarkIII Containment System for LNG carriers: 
+findings from the Sloshel project 
+ 
+H. Bogaert(1,2), L. Brosset(3), M.L. Kaminski(1) 
+1MARIN, Hydro Structural Services, Wageningen, The Netherlands 
+2Delft University of Technology, Ship Structures Laboratory, Delft, The Netherlands 
+3GTT (Gaztransport & Technigaz), Liquid Motion Department, Saint-Rémy-lès-Chevreuse, France 
+ 
+ 
+ABSTRACT 
+ 
+The subject of this paper is the behavior of MarkIII corrugated primary 
+membrane under breaking wave impacts. The study is based on the 
+database of the large scale impact tests  from the Sloshel project. 
+Unidirectional breaking waves were generated in a flume tank in order 
+to break onto an instrumented wall covered by a corrugated surface 
+reproducing the MarkIII membrane at scale 1:6. Pressure sensors were 
+positioned in between the corrugations. A special sensor was designed 
+to measure the net force in the upward and downward direction on a 
+horizontal corrugation. Special care was taken to observe the 
+interaction between the wave impact and the corrugations by high 
+speed cameras synchronized with the data acquisition system. 
+Four sources of impact loads on the corrugations were observed: the 
+wave trough, the wave crest, the jet formed after wave impact or the 
+entrapped air. This observation gave evidence that more mechanisms 
+are involved during sloshing-corrugation interaction than those 
+indentified previously with wet drop tests. Moreover, the pressure 
+measured upstream and downstream of a horizontal corrugation is 
+correlated to the global vertical force, but this relation depends highly 
+on the sensor position with regards to the corrugation, and the source of 
+loading. 
+The paper describes the different kinds of corrugation loadings during 
+breaking wave impacts. It emphasizes the need to take into account the 
+sloshing corrugation interaction into a sloshing assessment 
+methodology but shows that applying scaled corrugations in small scale 
+tests (scale around 1:40 - 1:35) is not adequate. 
+ 
+KEY WORDS: sloshing, LNG carrier, membrane containment 
+system, MarkIII, corrugation, impact pressure, model test, flume tank, 
+breaking wave. 
+ 
+INTRODUCTION 
+ 
+MarkIII is one of the membrane Cargo Containment Systems (CCS) 
+designed by GTT for LNG carriers. It is mainly composed of 3 m x 1 m 
+panels of polyurethane foam covered by a stainless steel corrugated 
+membrane in contact with the LNG at -162°C (see Figure 1). The 
+panels are bonded to the double hull by resin ropes. 
+The membrane features large parallel corrugations crossing 
+perpendicularly small parallel corrugations. The large and small 
+corrugations are respectively 54 mm and 37.2 mm high. The distance 
+between two large or two small corrugations is 340 mm. On the 
+longitudinal walls of the MarkIII tanks the large corrugations are 
+vertical whilst they are horizontal on the transverse bulkheads. 
+ 
+Figure 1  – MarkIII containment system (left), sample of the 
+corrugated membrane (right) 
+In 2008, some deformations of the membrane corrugations were 
+observed for the first time on board several MarkIII ships during 
+routine dry dock inspections. These deformations, without any leakage 
+of the cargo, affected both large and small corrugations mainly in the 
+corners of the ceiling and less frequently in the region covering a few 
+meters above the chamfers of the longitudinal bulkheads. They had 
+clearly been caused by sloshing impacts. Some corrugations were 
+globally bent whereas some others were pinched almost symmetrically. 
+The design loads on the CCS of membrane ships are determined by 
+using a sloshing assessment methodology based on model tests with 
+tanks at scale 1:40 and flat walls (see Gervaise et al., 2009). After these 
+incidents some questions were raised: 
+/square4 How to determine the loads on the corrugations? 
+/square4 Could the presence of corrugations magnify the loads locally on 
+the polyurethane foam? 
+/square4 How to take this influence into account within the methodology? 
+Is it relevant to have scaled corrugations inside the model tanks? 
+After the incidents an investigation plan was launched by GTT. A 
+reverse engineering process permitted to evaluate the loads capable of 
+producing the different deformations observed. It was concluded that, 
+with a static pressure up to 20 bar, both the corrugations and the 
+insulation below remain sound, even though the corrugations may be 
+significantly deformed. 
+The analysis presented in this paper was carried out based on 
+experimental results from the Sloshel project (see Brosset et al., 2009). 
+So-called large scale tests  were carried out by MARIN in the Scheldt 
+flume of Deltares (NL). Unidirectional breaking waves were generated 
+in the flume in order to impact an instrumented rigid vertical wall. Two 
+configurations of the wall were tested: a flat wall and a corrugated wall 
+Proceedings of the Twentieth (2010) International Offshore and Polar Engineering Conference 
+Beijing, China, June 2025, 2010 
+Copyright © 2010 by The International Society of Offshore and Polar Engineers (ISOPE) 
+ISBN 978-1-880653-77-7 (Set); ISSN 1098-6189 (Set); www.isope.org  
+ 
+109
